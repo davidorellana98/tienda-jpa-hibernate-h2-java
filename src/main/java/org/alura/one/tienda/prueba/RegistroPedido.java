@@ -1,16 +1,18 @@
 package org.alura.one.tienda.prueba;
 
 import org.alura.one.tienda.dao.CategoriaDao;
+import org.alura.one.tienda.dao.ClienteDao;
+import org.alura.one.tienda.dao.PedidoDao;
 import org.alura.one.tienda.dao.ProductoDao;
-import org.alura.one.tienda.modelo.Categoria;
-import org.alura.one.tienda.modelo.CategoriaId;
-import org.alura.one.tienda.modelo.Producto;
+import org.alura.one.tienda.modelo.*;
 import org.alura.one.tienda.utils.JPAUtils;
+import org.alura.one.tienda.vo.RelatorioVenta;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.util.List;
 
-public class RegistroProducto {
+public class RegistroPedido {
 
     public static void main(String[] args) {
         registroProducto();
@@ -18,13 +20,23 @@ public class RegistroProducto {
 
         ProductoDao productoDao = new ProductoDao(em);
         Producto producto = productoDao.consultaId(1L);
-        System.out.println(producto.getNombre());
+        ClienteDao clienteDao = new ClienteDao(em);
+        PedidoDao pedidoDao = new PedidoDao(em);
 
-        BigDecimal precio = productoDao.consultarPrecioNombreProducto("Samsung");
-        System.out.println(precio);
+        Cliente cliente = new Cliente("Juan", "000000");
+        Pedido pedido = new Pedido(cliente);
+        pedido.agregarItems(new ItemsPedido(5, producto, pedido));
 
-        Categoria find = em.find(Categoria.class, new CategoriaId("CELULARES", "123"));
-        System.out.println(find.getNombre());
+        em.getTransaction().begin();
+        clienteDao.guardar(cliente);
+        pedidoDao.guardar(pedido);
+        em.getTransaction().commit();
+
+        BigDecimal valorTotal = pedidoDao.valorTotalVendido();
+        System.out.println("Valor Total: " + valorTotal);
+
+        List<RelatorioVenta> relatorio = pedidoDao.relatorioVentasVO();
+        relatorio.forEach(System.out::println);
     }
 
     private static void registroProducto() {

@@ -4,8 +4,11 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@SuppressWarnings("all")
 @Entity
 @Table(name = "productos")
+@NamedQuery(name = "Producto.consultaPrecio", query = "SELECT p.precio FROM Producto AS p WHERE p.nombre=:nombre")
+@Inheritance(strategy = InheritanceType.JOINED) // Hace la relación entre entidades separadas, y es utilizada en la clase base
 public class Producto {
 
     @Id
@@ -16,8 +19,10 @@ public class Producto {
     private BigDecimal precio;
     @Column(name = "fecha_registro")
     private LocalDate fechaRegistro = LocalDate.now();
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Categoria categoria;
+
+    public Producto() { }
 
     public Producto(String nombre, String descripcion, BigDecimal precio, Categoria categoria) {
         this.nombre = nombre;
@@ -25,8 +30,6 @@ public class Producto {
         this.precio = precio;
         this.categoria = categoria;
     }
-
-    public Producto() { }
 
     public Long getId() {
         return id;

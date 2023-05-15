@@ -1,7 +1,6 @@
 package org.alura.one.tienda.dao;
 
 import org.alura.one.tienda.modelo.Categoria;
-import org.alura.one.tienda.modelo.Producto;
 
 import javax.persistence.EntityManager;
 
@@ -24,5 +23,10 @@ public class CategoriaDao {
     public void remover(Categoria categoria)  {
         categoria = em.merge(categoria);
         em.remove(categoria);
+    }
+
+    public Categoria consultaNombre(String nombre){
+        String jpql =" SELECT c FROM Categoria AS c WHERE c.categoriaId.nombre=:nombre ";
+        return em.createQuery(jpql,Categoria.class).setParameter("nombre", nombre).getSingleResult();
     }
 }

@@ -9,13 +9,15 @@
         <!-- Permite mapear de manera manual las entidades, pero hibernate lo hace de manera automatica <class>org.alura.one.tienda.modelo.Producto</class>-->
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:tienda"/>
+            <!--Ruta donde se va a guardar los datos de la BD-->
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:C:\java-h2\jpa\database"/>
             <property name="javax.persistence.jdbc.user" value="tienda"/>
             <property name="javax.persistence.jdbc.password" value="tienda"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.format_sql" value="true"/>
+
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
